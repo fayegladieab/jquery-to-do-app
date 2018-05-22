@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" type="text/css" href="./stylelist.css">
+  <!-- link to jQuery -->
+  <script
+  src="https://code.jquery.com/jquery-3.3.1.js"
+  integrity="sha256-2Kok7MbOyxpgUVvAk/HJ2jigOSYS2auK4Pfzbm7uH60="
+  crossorigin="anonymous"></script>
+  <!-- link to font awesome -->
+  <script defer src="https://use.fontawesome.com/releases/v5.0.9/js/all.js" integrity="sha384-8iPTk2s/jMVj81dnzb/iFR2sdA7u06vHJyyLlAd4snFpCl/SnyUjRrbdJsw1pGIl" crossorigin="anonymous"></script>
+
+  <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+  <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+  <script>
+    $( function() {
+      $( "#addingThings" ).sortable();
+      $( "#addingThings" ).disableSelection();
+    } );
+  </script>
+
+
+</head>
+<body>
+  <h2>
+    <font size="20">To Do List</font>
+  </h2>
+  <!-- <form> -->
+    <div id="addingThings">
+      <input id="inputfield" placeholder="Type something"/>
+      <button class="button" id="add" type="submit" onclick="addTodo()">add</button>
+
+    </div>
+    <!-- </form> -->
+
+    <script>
+      var input = document.getElementById("inputfield");
+      input.addEventListener("keyup", function(event) {
+// Cancel the default action, if needed
+// event.preventDefault();
+// Number 13 is the "Enter" key on the keyboard
+if (event.keyCode === 13) {
+// Trigger the button element with a click
+document.getElementById("add").click();
+}
+});
+
+
+      var todos = JSON.parse(localStorage.getItem('todolist')) || []
+
+function addTodo(){
+
+var todo = $('#inputfield').val()
+
+// alert(`Added ${todo} to the list`)
+$(`<h2><span>${todo}</span><i onclick="del()" class="fas fa-trash-alt"></i></h2>`).appendTo('#addingThings')
+$('svg').hide()
+todos.push(todo)
+localStorage.setItem('todolist', JSON.stringify(todos))
+
+$('#inputfield').val("")
+$('h2')
+.mouseenter(function() {
+  $( "svg:first", this ).css( "display","inline" );
+})
+.mouseleave(function() {
+  $( "svg:first", this ).css( "display", "none" );
+});
+
+
+}
+
+
+function del() {
+  debugger
+// fix this
+event.target.closest('h2').remove()
+console.log(event.target.closest('h2').innerText)
+todos.splice(todos.indexOf(event.target.closest('h2').innerText),1)
+  localStorage.setItem('todolist', JSON.stringify(todos))
+}
+
+// A $( document ).ready() block.
+$( document ).ready(function() {
+  if (todos.length>0){
+    for (var i = 0; i<todos.length; i++){
+      $(`<h2><span>${todos[i]}</span><i onclick="del()" class="fas fa-trash-alt"></i></h2>`).appendTo('#addingThings')
+    }
+  }
+
+
+});
+
+</script>
+</body>
+</html>
